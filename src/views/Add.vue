@@ -1,24 +1,27 @@
 <template>
-  <p>上传文件添加文献</p>
-  <el-upload
-      class="upload"
-      action="http://106.13.127.90:8900/csv-add-literature"
-      method="post"
-      :limit="1"
-      accept=".csv"
-      name="csvFile"
-  >
-    <el-button size="small" type="primary">点击上传</el-button>
-    <template #tip>
-      <div class="el-upload__tip">
-        上传文件支持.csv格式
-      </div>
-    </template>
-  </el-upload>
-  <p>单个文献添加</p>
   <el-row>
     <el-col :span="6"></el-col>
     <el-col :span="12">
+      <p>上传文件添加文献</p>
+      <el-upload
+          class="upload"
+          action="http://106.13.127.90:8900/csv-add-literature"
+          method="post"
+          :before-upload="beforeUpload"
+          accept=".csv"
+          name="csvFile"
+          drag
+          multiple
+          ref="upload"
+      >
+        <div class="el-upload__text">将文件拖到此处或<em>点击上传</em></div>
+        <template #tip>
+          <div class="el-upload__tip">
+            上传文件支持.csv格式
+          </div>
+        </template>
+      </el-upload>
+      <p>单个文献添加</p>
       <el-form label-width="120px" class="add-form" :model="form" ref="form" :rules="rules">
         <el-row>
           <el-col :span="12">
@@ -72,7 +75,7 @@
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button type="primary" @click="submitForm()">提交</el-button>
+          <el-button type="primary" @click="submitForm('form')">提交</el-button>
           <el-button @click="resetForm('form')">重置</el-button>
         </el-form-item>
       </el-form>
@@ -98,26 +101,41 @@ export default {
       },
       csvFile: '',
       rules:{
-        'title':[{required:true,trigger:'blur'}],
-        'author':[{required:true,trigger:'blur'}],
-        'organization':[{required:true,trigger:'blur'}],
-        'keyword':[{required:true,trigger:'blur'}],
-        'literatureAbstract':[{required:true,trigger:'blur'}],
-        'origin':[{required:true,trigger:'blur'}],
-        'publicationTime':[{required:true,trigger:'change'}],
-        'literatureType':[{required:true,trigger:'change'}]
+        'title':[{required:true,trigger:'blur',message:'标题不能为空'}],
+        'author':[{required:true,trigger:'blur',message:'作者不能为空'}],
+        'organization':[{required:true,trigger:'blur',message:'机构不能为空'}],
+        'keyword':[{required:true,trigger:'blur',message:'关键字不能为空'}],
+        'literatureAbstract':[{required:true,trigger:'blur',message:'摘要不能为空'}],
+        'origin':[{required:true,trigger:'blur',message:'期刊/会议 名称不能为空'}],
+        'publicationTime':[{required:true,trigger:'change',message:'发表时间不能为空'}],
+        'literatureType':[{required:true,trigger:'change',message:'文献类型不能为空'}]
       }
     }
   },
   methods: {
+    beforeUpload(file){
+      const isCSV = file.type === 'application/vnd.ms-excel'
+      if(!isCSV){
+        this.$message.error('上传文件仅支持.csv格式')
+        return false
+      }
+    },
     /*handleRemove(file) {
       console.log(file)
     },
     beforeRemove(file) {
       return this.$confirm(`取消${file.name}上传?`)
     },*/
-    submitForm() {
-      submitHttp(this)
+    submitForm(form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          submitHttp(this)
+        } else {
+          console.log('error submit')
+          this.$message.error('提交失败，表单请填完整！')
+          return false
+        }
+      })
     },
     resetForm(form) {
       this.$refs[form].resetFields()
