@@ -1,15 +1,16 @@
 <template>
   <div id="nav">
     <el-menu
-        :default-active="$router.path"
+        :default-active="$route.path"
         router
         class="el-menu-demo"
         mode="horizontal"
-        background-color="#545c64"
+        background-color="#606266"
         text-color="#fff"
         active-text-color="#ffd04b"
-        @select="handleSelect"
     >
+      <el-menu-item>文献管理系统</el-menu-item>
+      <el-menu-item index="/">首 页</el-menu-item>
       <el-menu-item index="/search">检索文献</el-menu-item>
       <el-menu-item index="/add">添加文献</el-menu-item>
     </el-menu>
@@ -25,18 +26,14 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-export default defineComponent({
-  setup() {
-    // const activeIndex = ref('1')
-    const handleSelect = (key, keyPath) => {
-      console.log(key, keyPath)
-    }
+
+export default {
+  data() {
     return {
-      handleSelect,
     }
-  },
-})
+  }
+}
+
 </script>
 
 <style>

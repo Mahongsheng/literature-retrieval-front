@@ -110,23 +110,13 @@ export default {
     }
   },
   methods: {
-    /*handleRemove(file) {
-      console.log(file)
-    },
-    beforeRemove(file) {
-      return this.$confirm(`取消${file.name}上传?`)
-    },*/
     submitForm() {
       submitHttp(this)
     },
     resetForm(form) {
       this.$refs[form].resetFields()
     }
-  },
-  // myUpload(item) {
-    // this.csvFile.append('csvFile', item.file)
-    // axios.post('http://106.13.127.90:8900/csv-add-literature',this.csvFile)
-  // }
+  }
 }
 
 function submitHttp(that) {
@@ -140,7 +130,7 @@ function submitHttp(that) {
         publicationTime: that.form.publicationTime,
         literatureType: that.form.literatureType
       }
-      axios.post('http://106.13.127.90:8900/single-add-literature', json)
+      axios.post("http://106.13.127.90:8900/single-add-literature", json)
           .then(response=>{
             alert('submit success!!')
             console.log(response)
