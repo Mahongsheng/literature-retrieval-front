@@ -171,6 +171,12 @@ export default {
         path:'/search',
         query:{
           retrievalWord: this.retrievalWord,
+          retrievalWordType: "0",
+          author: "",
+          organization: "",
+          origin: "",
+          publicationTime: "",
+          literatureType: "",
           type: "MySQL"
         }
       })
