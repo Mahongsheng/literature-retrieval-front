@@ -5,7 +5,7 @@
       <p>上传文件添加文献</p>
       <el-upload
         class="upload"
-        action="http://106.13.127.90:8900/csv-add-literature"
+        action="http://localhost:8900/csv-add-literature"
         method="post"
         :before-upload="beforeUpload"
         accept=".csv"
@@ -175,7 +175,7 @@ export default {
   },
   // myUpload(item) {
   // this.csvFile.append('csvFile', item.file)
-  // axios.post('http://106.13.127.90:8900/csv-add-literature',this.csvFile)
+  // axios.post('http://localhost:8900/csv-add-literature',this.csvFile)
   // }
 };
 
@@ -191,7 +191,7 @@ function submitHttp(that) {
     literatureType: that.form.literatureType,
   };
   axios
-    .post("http://106.13.127.90:8900/single-add-literature", json)
+    .post("http://localhost:8900/single-add-literature", json)
     .then((response) => {
       alert("submit success!!");
       console.log(response);

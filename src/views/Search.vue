@@ -401,7 +401,7 @@ function search(that, type) {
     literatureType: that.advancedSearch.literatureType
   }
   if (type === "MySQL") {
-    axios.post("http://106.13.127.90:8900/mysql/advanced-query",json)
+    axios.post("http://localhost:8900/mysql/advanced-query",json)
         .then(res=>{
           that.tableData = res.data
         })
@@ -410,7 +410,7 @@ function search(that, type) {
         })
   }
   else {
-    axios.post("http://106.13.127.90:8900/es/advanced-query",json)
+    axios.post("http://localhost:8900/es/advanced-query",json)
         .then(res=>{
           that.tableData = res.data
         })
@@ -423,7 +423,7 @@ function search(that, type) {
 
 function similarSearch(that) {
   that.similarLoading = true
-  axios.get("http://106.13.127.90:8900/es/similar-query?originKeywords=" + that.detailData.keyword + "&page=1&size=5")
+  axios.get("http://localhost:8900/es/similar-query?originKeywords=" + that.detailData.keyword + "&page=1&size=5")
       .then(res=>{
         that.similarData = res.data
       })
