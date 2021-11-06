@@ -166,7 +166,9 @@
         </div>
       </el-col>
       <el-col :span="1">
-        <el-backtop/>
+        <el-backtop
+            right="20">
+        </el-backtop>
       </el-col>
     </el-row>
     <el-dialog
@@ -266,6 +268,18 @@
                 </template>
               </el-table-column>
             </el-table>
+            <div class="pagination">
+              <el-pagination
+                  @size-change="similarSizeChange"
+                  @current-change="similarCurrentChange"
+                  :current-page="similarPage"
+                  small
+                  :page-sizes="[5, 10, 20]"
+                  :page-size="similarSize"
+                  layout="total, sizes, prev, pager, next, jumper"
+                  :total="wholeHits">
+              </el-pagination>
+            </div>
           </el-form-item>
         </el-form>
       </div>
@@ -292,6 +306,7 @@ export default {
       similarData: [],
       similarPage: 1,
       similarSize: 5,
+      wholeHits: 0,
       similarLoading: false,
       advancedSearch: {
         retrievalWord: "",
@@ -362,10 +377,18 @@ export default {
       similarSearch(this)
     },
     sizeChange: function (size) {
-      this.pageSize = size;
+      this.pageSize = size
     },
     currentChange: function(currentPage){
-      this.currentPage = currentPage;
+      this.currentPage = currentPage
+    },
+    similarSizeChange: function (size) {
+      this.similarSize = size
+      similarSearch(this)
+    },
+    similarCurrentChange: function(currentPage){
+      this.similarPage = currentPage
+      similarSearch(this)
     },
   },
   mounted: function() {
@@ -385,7 +408,7 @@ function getParams(that) {
     that.advancedSearch.publicationTime = that.$route.query.publicationTime
     that.advancedSearch.literatureType = that.$route.query.literatureType
     that.type = that.$route.query.type
-    search(that,that.type)
+    search(that, that.type)
   }
 }
 
@@ -423,9 +446,10 @@ function search(that, type) {
 
 function similarSearch(that) {
   that.similarLoading = true
-  axios.get("http://localhost:8900/es/similar-query?originKeywords=" + that.detailData.keyword + "&page=1&size=5")
+  axios.get("http://localhost:8900/es/similar-query?originKeywords=" + that.detailData.keyword + "&page=" + that.similarPage +"&size=" + that.similarSize)
       .then(res=>{
-        that.similarData = res.data
+        that.similarData = res.data.literatureEs
+        that.wholeHits = res.data.wholeHits
       })
       .catch(function(){
         alert('相似文献检索失败！')
@@ -448,7 +472,7 @@ function similarSearch(that) {
   .filterBlock{
     display: flex;
     flex-wrap: wrap;
-    padding: 0 20px 0 0;
+    padding: 0 14px 0 0;
   }
 
   .dialogBlock{
