@@ -317,6 +317,7 @@
 
 <script>
 import axios from "axios";
+import { ElMessage } from 'element-plus';
 
 export default {
   name: "Search",
@@ -461,19 +462,34 @@ function search(that, type) {
     axios
       .post("http://localhost:8900/mysql/advanced-query", json)
       .then((res) => {
-        that.tableData = res.data;
+        if (res.data.length === 0) {
+          ElMessage({
+            message: '无数据',
+            type: 'success',
+          })
+        } else {
+          that.tableData = res.data;
+        }
       })
-      .catch(function () {
-        alert("MySQL检索失败！");
+      .catch(e => {
+        console.log(e);
+        ElMessage.error("MySQL检索失败！");
       });
   } else {
     axios
       .post("http://localhost:8900/es/advanced-query", json)
       .then((res) => {
-        that.tableData = res.data;
+        if (res.data.length === 0) {
+          ElMessage({
+            message: '无数据',
+            type: 'success',
+          })
+        } else {
+          that.tableData = res.data;
+        }
       })
       .catch(function () {
-        alert("ElasticsearchSearch检索失败！");
+        ElMessage.error("ElasticsearchSearch检索失败！");
       });
   }
   that.loading = false;

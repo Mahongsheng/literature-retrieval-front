@@ -102,6 +102,8 @@
 
 <script>
 import axios from "axios";
+import { ElMessage } from 'element-plus';
+
 export default {
   data() {
     return {
@@ -193,7 +195,10 @@ function submitHttp(that) {
   axios
     .post("http://localhost:8900/single-add-literature", json)
     .then((response) => {
-      alert("submit success!!");
+      ElMessage({
+        message: '已成功添加到数据库！',
+        type: 'success',
+      })
       console.log(response);
     })
     .catch(function () {
